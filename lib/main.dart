@@ -4,6 +4,8 @@ import 'package:instagram_clone_app/screen/feed_screen.dart';
 import 'package:instagram_clone_app/screen/login_screen.dart';
 import 'package:instagram_clone_app/screen/signup_screen.dart';
 
+import 'screen/home_screen.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
       stream: FirebaseAuth.instance.onAuthStateChanged,
       builder: (BuildContext context, snapshot) {
         if(snapshot.hasData) {
-          return FeedScreen();
+          return HomeScreen();
         } else {
           return LoginScreen();
         }
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
       home: _getScreenId(),
       routes: {
         LoginScreen.id : (context) => LoginScreen(),
-        SignUpScreen.id : (context) => SignUpScreen()
+        SignUpScreen.id : (context) => SignUpScreen(),
+        FeedScreen.id : (context) => FeedScreen(),
       },
     );
   }
