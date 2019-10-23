@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone_app/models/user_model.dart';
 import 'package:instagram_clone_app/services/database_service.dart';
 
@@ -13,6 +17,7 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
 
   final _formKey = GlobalKey<FormState>();
+  File _profileImage;
   String _name = ' ';
   String _bio = ' ';
 
@@ -25,6 +30,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       // DB update
       DatabaseService.updateUser(user);
       Navigator.pop(context);
+    }
+  }
+
+  _handleImageFromGallery() async{
+    File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if(imageFile != null) {
+      setState(() {
+        _profileImage = imageFile;
+      });
+    }
+  }
+
+  _displayPhotoImage() {
+    //no new image
+    if(_profileImage == null) {
+      //no exist profile image
+      if(widget.user.profileImageUrl.isEmpty) {
+        //display placeholer
+        return AssetImage('assets/images/user_placeholder.jpg');
+      } else {
+        //user profile image exists
+        return CachedNetworkImageProvider(widget.user.profileImageUrl);
+      }
+    }else {
+      //new profile image
+      return FileImage(_profileImage);
     }
   }
 
@@ -55,10 +86,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 60.0,
-                    backgroundImage: NetworkImage('https://i.redd.it/dmdqlcdpjlwz.jpg'),
+                    backgroundColor: Colors.grey,
+                    backgroundImage: _displayPhotoImage(),
                   ),
                   FlatButton(
-                    onPressed: () => print('Change Profile Image'),
+                    onPressed: () => _handleImageFromGallery(),
                     child: Text('Change Profile Image', style: TextStyle(color: Theme.of(context).accentColor, fontSize: 16.0),)
                   ),
                   TextFormField(
