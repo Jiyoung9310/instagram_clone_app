@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone_app/models/user_data.dart';
 import 'package:instagram_clone_app/screen/activity_screen.dart';
 import 'package:instagram_clone_app/screen/create_post_screen.dart';
 import 'package:instagram_clone_app/screen/feed_screen.dart';
 import 'package:instagram_clone_app/screen/profile_screen.dart';
 import 'package:instagram_clone_app/screen/search_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String userId;
-  HomeScreen({this.userId});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -26,14 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'Instagram',
-          style: TextStyle(
-              color: Colors.black, fontSize: 35.0, fontFamily: 'Billabong'),
-        ),
-      ),
       body: PageView(
         controller: _pageController,
         children: <Widget>[
@@ -41,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SearchScreen(),
           CreatePostScreen(),
           ActivityScreen(),
-          ProfileScreen(userId: widget.userId,),
+          ProfileScreen(userId: Provider.of<UserData>(context).currentUserId,),
         ],
         onPageChanged: (int index) {
           setState(() {

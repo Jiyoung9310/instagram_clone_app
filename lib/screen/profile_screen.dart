@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone_app/models/user_data.dart';
 import 'package:instagram_clone_app/models/user_model.dart';
 import 'package:instagram_clone_app/screen/edit_profile_screen.dart';
 import 'package:instagram_clone_app/util/constants.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
 
@@ -16,7 +18,16 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<UserData>(context).currentUserId);
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Text(
+            'Instagram',
+            style: TextStyle(
+                color: Colors.black, fontSize: 35.0, fontFamily: 'Billabong'),
+          ),
+        ),
       backgroundColor: Colors.white,
       body: FutureBuilder(
         future: usersRef.document(widget.userId).get(),
